@@ -20,6 +20,14 @@ export const Menu = () => {
             </Link>
           </li>
         ))}
+        <li key="about">
+          <Link
+            href="/about"
+            className={selectedKey === "about" ? "active" : ""}
+          >
+            About
+          </Link>
+        </li>
       </ul>
       <button onClick={() => logout()}>Logout</button>
     </nav>

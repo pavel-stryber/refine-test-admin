@@ -2,29 +2,15 @@
 
 import { AuthBindings } from "@refinedev/core";
 import Cookies from "js-cookie";
-
-const mockUsers = [
-  {
-    name: "John Doe",
-    email: "johndoe@mail.com",
-    roles: ["admin"],
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    name: "Jane Doe",
-    email: "janedoe@mail.com",
-    roles: ["editor"],
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-];
+import * as apiRequests from '../../services/api';
 
 export const authProvider: AuthBindings = {
-  login: async ({ email, username, password, remember }) => {
-    // Suppose we actually send a request to the back end here.
-    const user = mockUsers[0];
-
-    if (user) {
-      Cookies.set("auth", JSON.stringify(user), {
+  login: async ({ email }) => {
+    const res = await apiRequests.signIn({
+      phone: email,
+    });
+    if (res.ok) {
+      Cookies.set("auth", JSON.stringify(res.data?.data), {
         expires: 30, // 30 days
         path: "/",
       });
@@ -50,8 +36,8 @@ export const authProvider: AuthBindings = {
     };
   },
   check: async () => {
-    const auth = Cookies.get("auth");
-    if (auth) {
+    const authString = Cookies.get("auth");
+    if (authString) {
       return {
         authenticated: true,
       };
@@ -64,18 +50,18 @@ export const authProvider: AuthBindings = {
     };
   },
   getPermissions: async () => {
-    const auth = Cookies.get("auth");
-    if (auth) {
-      const parsedUser = JSON.parse(auth);
-      return parsedUser.roles;
+    const authString = Cookies.get("auth");
+    if (authString) {
+      const auth = JSON.parse(authString);
+      return auth.user.role;
     }
     return null;
   },
   getIdentity: async () => {
-    const auth = Cookies.get("auth");
-    if (auth) {
-      const parsedUser = JSON.parse(auth);
-      return parsedUser;
+    const authString = Cookies.get("auth");
+    if (authString) {
+      const auth = JSON.parse(authString);
+      return auth.user;
     }
     return null;
   },

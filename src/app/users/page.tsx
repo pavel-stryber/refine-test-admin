@@ -1,66 +1,41 @@
 "use client";
 
-import { GetManyResponse, useMany, useNavigation } from "@refinedev/core";
+import { useList, useNavigation } from "@refinedev/core";
 import { useTable } from "@refinedev/react-table";
 import { ColumnDef, flexRender } from "@tanstack/react-table";
 import React from "react";
 
-export default function BlogPostList() {
+export default function UsersList() {
   const columns = React.useMemo<ColumnDef<any>[]>(
     () => [
       {
-        id: "id",
-        accessorKey: "id",
+        id: "userId",
+        accessorKey: "userId",
         header: "ID",
       },
       {
-        id: "title",
-        accessorKey: "title",
-        header: "Title",
+        id: "firstName",
+        accessorKey: "firstName",
+        header: "First name",
       },
       {
-        id: "content",
-        accessorKey: "content",
-        header: "Content",
+        id: "lastName",
+        accessorKey: "lastName",
+        header: "Last name",
       },
       {
-        id: "category",
-        header: "Category",
-        accessorKey: "category",
-        cell: function render({ getValue, table }) {
-          const meta = table.options.meta as {
-            categoryData: GetManyResponse;
-          };
-
-          try {
-            const category = meta.categoryData?.data?.find(
-              (item) => item.id == getValue<any>()?.id
-            );
-
-            return category?.title ?? "Loading...";
-          } catch (error) {
-            return null;
-          }
-        },
+        id: "role",
+        accessorKey: "role",
+        header: "Role",
       },
       {
-        id: "status",
-        accessorKey: "status",
-        header: "Status",
-      },
-      {
-        id: "createdAt",
-        accessorKey: "createdAt",
-        header: "Created At",
-        cell: function render({ getValue }) {
-          return new Date(getValue<any>()).toLocaleString(undefined, {
-            timeZone: "UTC",
-          });
-        },
+        id: "phone",
+        accessorKey: "phone",
+        header: "Phone",
       },
       {
         id: "actions",
-        accessorKey: "id",
+        accessorKey: "userId",
         header: "Actions",
         cell: function render({ getValue }) {
           return (
@@ -74,14 +49,14 @@ export default function BlogPostList() {
             >
               <button
                 onClick={() => {
-                  show("blog_posts", getValue() as string);
+                  show("users", getValue() as string);
                 }}
               >
                 Show
               </button>
               <button
                 onClick={() => {
-                  edit("blog_posts", getValue() as string);
+                  edit("users", getValue() as string);
                 }}
               >
                 Edit
@@ -115,20 +90,15 @@ export default function BlogPostList() {
     columns,
   });
 
-  const { data: categoryData } = useMany({
-    resource: "categories",
-    ids:
-      tableData?.data?.map((item) => item?.category?.id).filter(Boolean) ?? [],
-    queryOptions: {
-      enabled: !!tableData?.data,
-    },
+  const { data: usersData } = useList({
+    resource: "users",
   });
-
+  console.log(usersData);
   setOptions((prev) => ({
     ...prev,
     meta: {
       ...prev.meta,
-      categoryData,
+      usersData,
     },
   }));
 
@@ -142,7 +112,7 @@ export default function BlogPostList() {
         }}
       >
         <h1>{"List"}</h1>
-        <button onClick={() => create("blog_posts")}>{"Create"}</button>
+        <button onClick={() => create("users")}>{"Create"}</button>
       </div>
       <div style={{ maxWidth: "100%", overflowY: "scroll" }}>
         <table>

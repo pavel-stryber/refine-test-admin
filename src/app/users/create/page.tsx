@@ -13,9 +13,6 @@ export default function BlogPostCreate() {
     formState: { errors },
   } = useForm({});
 
-  const { options: categoryOptions } = useSelect({
-    resource: "categories",
-  });
 
   return (
     <div style={{ padding: "16px" }}>
@@ -24,7 +21,7 @@ export default function BlogPostCreate() {
         <div>
           <button
             onClick={() => {
-              list("blog_posts");
+              list("users");
             }}
           >
             List
@@ -63,23 +60,6 @@ export default function BlogPostCreate() {
             />
             <span style={{ color: "red" }}>
               {(errors as any)?.content?.message as string}
-            </span>
-          </label>
-          <label>
-            <span style={{ marginRight: "8px" }}>Category</span>
-            <select
-              {...register("category.id", {
-                required: "This field is required",
-              })}
-            >
-              {categoryOptions?.map((option) => (
-                <option value={option.value} key={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <span style={{ color: "red" }}>
-              {(errors as any)?.category?.id?.message as string}
             </span>
           </label>
           <label>

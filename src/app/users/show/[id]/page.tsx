@@ -7,16 +7,7 @@ export default function BlogPostShow() {
   const { id } = useResource();
   const { queryResult } = useShow({});
   const { data } = queryResult;
-
   const record = data?.data;
-
-  const { data: categoryData, isLoading: categoryIsLoading } = useOne({
-    resource: "categories",
-    id: record?.category?.id || "",
-    queryOptions: {
-      enabled: !!record,
-    },
-  });
 
   return (
     <div style={{ padding: "16px" }}>
@@ -29,36 +20,30 @@ export default function BlogPostShow() {
       >
         <h1>{"Show"}</h1>
         <div style={{ display: "flex", gap: "8px" }}>
-          <button onClick={() => list("blog_posts")}>{"List"}</button>
-          <button onClick={() => edit("blog_posts", id ?? "")}>{"Edit"}</button>
+          <button onClick={() => list("users")}>{"List"}</button>
+          <button onClick={() => edit("users", id ?? "")}>{"Edit"}</button>
         </div>
       </div>
       <div>
         <div style={{ marginTop: "6px" }}>
           <h5>{"ID"}</h5>
-          <div>{record?.id ?? ""}</div>
+          <div>{record?.userId ?? ""}</div>
         </div>
         <div style={{ marginTop: "6px" }}>
-          <h5>{"Title"}</h5>
-          <div>{record?.title}</div>
+          <h5>{"First nanme"}</h5>
+          <div>{record?.firstName}</div>
         </div>
         <div style={{ marginTop: "6px" }}>
-          <h5>{"Content"}</h5>
-          <p>{record?.content}</p>
+          <h5>{"Last name"}</h5>
+          <p>{record?.lastName}</p>
         </div>
         <div style={{ marginTop: "6px" }}>
-          <h5>{"Category"}</h5>
-          <div>
-            {categoryIsLoading ? (
-              <>Loading...</>
-            ) : (
-              <>{categoryData?.data?.title}</>
-            )}
-          </div>
+          <h5>{"Phone"}</h5>
+          <p>{record?.phone}</p>
         </div>
         <div style={{ marginTop: "6px" }}>
-          <h5>{"Status"}</h5>
-          <div>{record?.status}</div>
+          <h5>{"Role"}</h5>
+          <div>{record?.role}</div>
         </div>
         <div style={{ marginTop: "6px" }}>
           <h5>{"Created at"}</h5>
